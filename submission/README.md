@@ -64,9 +64,15 @@ python task_2.py
 .
 
 # Task 5
-
+- Retrieve the Bellville South centroid from arcgis opendata
+- Creates a subset of the sr_hex.csv with values that are 1 minute away from bellville south 
+- Retrieves the wind direction and speed from a publicly hosted ods file.
+- Cleans the ods data and puts it into a dataframe.
 ### Usage 
 
 ```bash
 python task_5.py
 ```
+
+### Notes
+- Bellville South data is retrieved from the arcgis opendata platform at https://odp-cctegis.opendata.arcgis.com/datasets/cctegis::official-planning-suburbs/about

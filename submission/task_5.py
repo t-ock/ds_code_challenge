@@ -1,3 +1,9 @@
+"""This script does the following
+- Retrieve the Bellville South centroid from arcgis opendata
+- Creates a subset of the sr_hex.csv with values that are 1 minute away from bellville south
+- Retrieves the wind direction and speed from a publicly hosted ods file.
+- Cleans the ods data and puts it into a dataframe.
+"""
 import gzip
 import h3
 
