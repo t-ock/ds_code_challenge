@@ -1,3 +1,4 @@
+import gzip
 import h3
 
 import requests
@@ -7,7 +8,7 @@ import pandas as pd
 from pandas_ods_reader import read_ods
 from loguru import logger
 
-from utils import boto_client, DS_CHALLENGE_BUCKET
+from utils import boto_client, DS_CHALLENGE_BUCKET, set_loguru_log_level
 
 # Set logger to info to ignore debugging
 set_loguru_log_level(logger, "INFO")
@@ -49,7 +50,9 @@ def create_subset_bellvile_south_1min(latitude, longitude):
     s3_client.download_file(DS_CHALLENGE_BUCKET, "sr.csv.gz", "sr.csv.gz")
     s3_client.download_file(DS_CHALLENGE_BUCKET, "sr_hex.csv.gz", "sr_hex.csv.gz")
 
-    sr_hex = pd.read_csv("sr_hex.csv")
+    with gzip.open("sr_hex.csv.gz") as f_in:
+        sr_hex = pd.read_csv(f_in)
+
     distance = sr_hex.apply(
         calculate_point_dist, axis=1, args=(latitude, longitude)
     )
@@ -114,17 +117,17 @@ def main():
     df2 = df2.iloc[:, 1:]
 
     df["creation_timestamp"] = pd.to_datetime(df["creation_timestamp"])
-    df2["date_time"] = pd.to_datetime(df2["date_time"])
+    # df2["date_time"] = pd.to_datetime(df2["date_time"])
 
-    data = pd.merge_asof(
-        df,
-        df2,
-        left_on="creation_timestamp",
-        right_on="date_time",
-        by="reference_number",
-    ).drop(columns=["date_time"], axis=1)
-
-    data.to_csv("final.csv")
+    # data = pd.merge_asof(
+    #     df,
+    #     df2,
+    #     left_on="creation_timestamp",
+    #     right_on="date_time",
+    #     by="reference_number",
+    # ).drop(columns=["date_time"], axis=1)
+    #
+    # data.to_csv("final.csv")
 
 
 if __name__ == '__main__':
